@@ -3,9 +3,7 @@
 const Redis = require('ioredis');
 const env = require('./env');
 
-const redis = new Redis({
-  host: env.redis.host,
-  port: env.redis.port,
+const redisConfig = {
   lazyConnect: false,
   maxRetriesPerRequest: 3,
   retryStrategy(times) {
@@ -13,7 +11,15 @@ const redis = new Redis({
     console.warn(`[redis] Retrying connection... attempt ${times}, next retry in ${delay}ms`);
     return delay;
   },
-});
+};
+
+const redis = env.redis.url
+  ? new Redis(env.redis.url, redisConfig)
+  : new Redis({
+      host: env.redis.host,
+      port: env.redis.port,
+      ...redisConfig
+    });
 
 redis.on('connect', () => {
   console.log('[redis] Connected successfully');

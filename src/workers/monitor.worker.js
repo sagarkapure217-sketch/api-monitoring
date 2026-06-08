@@ -17,7 +17,7 @@ const {
   resetFailureCount,
 } = require('../services/redis.service');
 
-const connection = {
+const connection = env.redis.url || {
   host: env.redis.host,
   port: env.redis.port,
 };

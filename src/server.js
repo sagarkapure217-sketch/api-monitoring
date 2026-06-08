@@ -10,7 +10,19 @@ const env = require('./config/env');
 const app = require('./app');
 const pool = require('./config/db');
 const redis = require('./config/redis');
-const monitorWorker = require('./workers/monitor.worker');
+
+const isWebOnly = env.processType === 'web';
+const isWorkerOnly = env.processType === 'worker';
+
+if (isWorkerOnly) {
+  console.error('[server] PROCESS_TYPE is set to "worker". Please start the worker process using "node src/worker.js" instead.');
+  process.exit(1);
+}
+
+let monitorWorker = null;
+if (!isWebOnly) {
+  monitorWorker = require('./workers/monitor.worker');
+}
 
 const server = http.createServer(app);
 
@@ -32,10 +44,14 @@ function shutdown(signal) {
       })
       .then(() => {
         console.log('[server] Redis connection closed');
-        return monitorWorker.close();
+        if (monitorWorker) {
+          return monitorWorker.close();
+        }
       })
       .then(() => {
-        console.log('[server] Monitor worker closed');
+        if (monitorWorker) {
+          console.log('[server] Monitor worker closed');
+        }
         console.log('[server] Graceful shutdown complete');
         process.exit(0);
       })

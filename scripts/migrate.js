@@ -9,8 +9,11 @@ const { Pool } = require('pg');
 // ---------------------------------------------------------------------------
 // Validate required environment variables before doing anything else
 // ---------------------------------------------------------------------------
-const REQUIRED = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
-const missing  = REQUIRED.filter((k) => !process.env[k] || process.env[k].trim() === '');
+let missing = [];
+if (!process.env.DATABASE_URL) {
+  const REQUIRED = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
+  missing = REQUIRED.filter((k) => !process.env[k] || process.env[k].trim() === '');
+}
 
 if (missing.length > 0) {
   console.error(`[migrate] Missing required environment variables: ${missing.join(', ')}`);
@@ -20,14 +23,27 @@ if (missing.length > 0) {
 // ---------------------------------------------------------------------------
 // Database connection — standalone pool used only by this script
 // ---------------------------------------------------------------------------
-const pool = new Pool({
-  host:     process.env.DB_HOST,
-  port:     parseInt(process.env.DB_PORT, 10),
-  user:     process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+const poolConfig = {
   connectionTimeoutMillis: 5000,
-});
+};
+
+if (process.env.DATABASE_URL) {
+  poolConfig.connectionString = process.env.DATABASE_URL;
+} else {
+  poolConfig.host = process.env.DB_HOST;
+  poolConfig.port = parseInt(process.env.DB_PORT, 10);
+  poolConfig.user = process.env.DB_USER;
+  poolConfig.password = process.env.DB_PASSWORD;
+  poolConfig.database = process.env.DB_NAME;
+}
+
+if (process.env.DB_SSL === 'true') {
+  poolConfig.ssl = {
+    rejectUnauthorized: false,
+  };
+}
+
+const pool = new Pool(poolConfig);
 
 // ---------------------------------------------------------------------------
 // Helpers

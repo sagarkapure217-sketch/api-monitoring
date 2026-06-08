@@ -2,20 +2,38 @@
 
 require('dotenv').config();
 
+const isProd = process.env.NODE_ENV === 'production';
+const processType = process.env.PROCESS_TYPE;
+
+if (isProd) {
+  if (processType !== 'web' && processType !== 'worker') {
+    throw new Error(
+      '[env] In production (NODE_ENV=production), PROCESS_TYPE must be explicitly set to either "web" or "worker".'
+    );
+  }
+}
+
 const REQUIRED_VARIABLES = [
   'PORT',
-  'DB_HOST',
-  'DB_PORT',
-  'DB_USER',
-  'DB_PASSWORD',
-  'DB_NAME',
-  'REDIS_HOST',
-  'REDIS_PORT',
   'JWT_SECRET',
   'RESEND_API_KEY',
   'ALERT_FROM_EMAIL',
   'ALERT_TO_EMAIL',
 ];
+
+if (!process.env.DATABASE_URL) {
+  REQUIRED_VARIABLES.push(
+    'DB_HOST',
+    'DB_PORT',
+    'DB_USER',
+    'DB_PASSWORD',
+    'DB_NAME'
+  );
+}
+
+if (!process.env.REDIS_URL) {
+  REQUIRED_VARIABLES.push('REDIS_HOST', 'REDIS_PORT');
+}
 
 const missing = REQUIRED_VARIABLES.filter(
   (key) => !process.env[key] || process.env[key].trim() === ''
@@ -30,18 +48,22 @@ if (missing.length > 0) {
 
 const env = {
   port: parseInt(process.env.PORT, 10),
+  processType: processType || null,
 
   db: {
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT, 10),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    name: process.env.DB_NAME,
+    connectionString: process.env.DATABASE_URL || null,
+    host: process.env.DB_HOST || null,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : null,
+    user: process.env.DB_USER || null,
+    password: process.env.DB_PASSWORD || null,
+    name: process.env.DB_NAME || null,
+    ssl: process.env.DB_SSL === 'true',
   },
 
   redis: {
-    host: process.env.REDIS_HOST,
-    port: parseInt(process.env.REDIS_PORT, 10),
+    url: process.env.REDIS_URL || null,
+    host: process.env.REDIS_HOST || null,
+    port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : null,
   },
 
   jwtSecret: process.env.JWT_SECRET,
