@@ -21,6 +21,9 @@ const REQUIRED_VARIABLES = [
   'ALERT_TO_EMAIL',
 ];
 
+console.log('[DEBUG] DATABASE_URL exists:', !!process.env.DATABASE_URL);
+console.log('[DEBUG] REDIS_URL exists:', !!process.env.REDIS_URL);
+
 const hasDatabaseUrl = process.env.DATABASE_URL !== undefined && process.env.DATABASE_URL.trim() !== '';
 const hasRedisUrl = process.env.REDIS_URL !== undefined && process.env.REDIS_URL.trim() !== '';
 
