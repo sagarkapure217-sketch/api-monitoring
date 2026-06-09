@@ -6,9 +6,21 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/auth':     { target: 'http://localhost:3000', changeOrigin: true },
-      '/monitors': { target: 'http://localhost:3000', changeOrigin: true },
-      '/health':   { target: 'http://localhost:3000', changeOrigin: true },
+      '/auth': {
+        target: 'https://api-monitoring-production.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/monitors': {
+        target: 'https://api-monitoring-production.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
+      '/health': {
+        target: 'https://api-monitoring-production.up.railway.app',
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
 })
