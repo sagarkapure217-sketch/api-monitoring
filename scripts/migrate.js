@@ -10,7 +10,8 @@ const { Pool } = require('pg');
 // Validate required environment variables before doing anything else
 // ---------------------------------------------------------------------------
 let missing = [];
-if (!process.env.DATABASE_URL) {
+const hasDatabaseUrl = process.env.DATABASE_URL !== undefined && process.env.DATABASE_URL.trim() !== '';
+if (!hasDatabaseUrl) {
   const REQUIRED = ['DB_HOST', 'DB_PORT', 'DB_USER', 'DB_PASSWORD', 'DB_NAME'];
   missing = REQUIRED.filter((k) => !process.env[k] || process.env[k].trim() === '');
 }

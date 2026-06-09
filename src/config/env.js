@@ -21,7 +21,10 @@ const REQUIRED_VARIABLES = [
   'ALERT_TO_EMAIL',
 ];
 
-if (!process.env.DATABASE_URL) {
+const hasDatabaseUrl = process.env.DATABASE_URL !== undefined && process.env.DATABASE_URL.trim() !== '';
+const hasRedisUrl = process.env.REDIS_URL !== undefined && process.env.REDIS_URL.trim() !== '';
+
+if (!hasDatabaseUrl) {
   REQUIRED_VARIABLES.push(
     'DB_HOST',
     'DB_PORT',
@@ -31,7 +34,7 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-if (!process.env.REDIS_URL) {
+if (!hasRedisUrl) {
   REQUIRED_VARIABLES.push('REDIS_HOST', 'REDIS_PORT');
 }
 
