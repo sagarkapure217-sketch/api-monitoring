@@ -8,6 +8,7 @@ if (dns.setDefaultResultOrder) {
 const http = require('http');
 const env = require('./config/env');
 const app = require('./app');
+app.set('trust proxy', 1);
 const pool = require('./config/db');
 const redis = require('./config/redis');
 
