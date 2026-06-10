@@ -5,13 +5,6 @@ if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder('ipv4first');
 }
 
-const env = require('./config/env');
-
-if (env.processType === 'web') {
-  console.error('[worker] PROCESS_TYPE is set to "web", but you started the worker entrypoint. Exiting.');
-  process.exit(1);
-}
-
 const pool = require('./config/db');
 const redis = require('./config/redis');
 const monitorWorker = require('./workers/monitor.worker');
