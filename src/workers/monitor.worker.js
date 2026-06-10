@@ -17,10 +17,12 @@ const {
   resetFailureCount,
 } = require('../services/redis.service');
 
-const connection = env.redis.url || {
-  host: env.redis.host,
-  port: env.redis.port,
-};
+const connection = process.env.REDIS_URL
+  ? { url: process.env.REDIS_URL }
+  : {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT) || 6379,
+    };
 
 const TIMEOUT_MS = 10_000;
 

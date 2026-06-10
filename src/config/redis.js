@@ -13,11 +13,17 @@ const redisConfig = {
   },
 };
 
-const redis = env.redis.url
-  ? new Redis(env.redis.url, redisConfig)
+const redisConnection = process.env.REDIS_URL
+  ? { url: process.env.REDIS_URL }
+  : {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: parseInt(process.env.REDIS_PORT) || 6379,
+    };
+
+const redis = redisConnection.url
+  ? new Redis(redisConnection.url, redisConfig)
   : new Redis({
-      host: env.redis.host,
-      port: env.redis.port,
+      ...redisConnection,
       ...redisConfig
     });
 
