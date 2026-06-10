@@ -1,0 +1,20 @@
+{
+  "rewrites": [
+    {
+      "source": "/auth/:path*",
+      "destination": "https://api-monitoring-production.up.railway.app/auth/:path*"
+    },
+    {
+      "source": "/monitors/:path*",
+      "destination": "https://api-monitoring-production.up.railway.app/monitors/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://api-monitoring-production.up.railway.app/health"
+    },
+    {
+      "source": "/((?!assets|favicon.svg|icons.svg).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
