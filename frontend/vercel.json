@@ -5,12 +5,35 @@
       "destination": "https://api-monitoring-production.up.railway.app/auth/:path*"
     },
     {
-      "source": "/monitors/:path*",
-      "destination": "https://api-monitoring-production.up.railway.app/monitors/:path*"
-    },
-    {
       "source": "/health",
       "destination": "https://api-monitoring-production.up.railway.app/health"
+    },
+    {
+      "source": "/monitors",
+      "destination": "https://api-monitoring-production.up.railway.app/monitors"
+    },
+    {
+      "source": "/monitors/:id/checks",
+      "destination": "https://api-monitoring-production.up.railway.app/monitors/:id/checks"
+    },
+    {
+      "source": "/monitors/:id/metrics",
+      "destination": "https://api-monitoring-production.up.railway.app/monitors/:id/metrics"
+    },
+    {
+      "source": "/monitors/:id/status",
+      "destination": "https://api-monitoring-production.up.railway.app/monitors/:id/status"
+    },
+    {
+      "source": "/monitors/:id",
+      "missing": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/html.*"
+        }
+      ],
+      "destination": "https://api-monitoring-production.up.railway.app/monitors/:id"
     },
     {
       "source": "/((?!assets|favicon.svg|icons.svg).*)",
