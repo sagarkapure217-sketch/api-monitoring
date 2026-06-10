@@ -7,7 +7,7 @@ const monitorController = require('../controllers/monitor.controller');
 const router = Router();
 
 // All monitor routes require a valid JWT
-router.use(authenticate);
+router.use('/monitors', authenticate);
 
 router.post('/monitors', monitorController.create);
 router.get('/monitors', monitorController.list);
