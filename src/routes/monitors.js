@@ -6,12 +6,9 @@ const monitorController = require('../controllers/monitor.controller');
 
 const router = Router();
 
-// All monitor routes require a valid JWT
-router.use('/monitors', authenticate);
-
-router.post('/monitors', monitorController.create);
-router.get('/monitors', monitorController.list);
-router.patch('/monitors/:id', monitorController.update);
-router.delete('/monitors/:id', monitorController.remove);
+router.post('/monitors', authenticate, monitorController.create);
+router.get('/monitors', authenticate, monitorController.list);
+router.patch('/monitors/:id', authenticate, monitorController.update);
+router.delete('/monitors/:id', authenticate, monitorController.remove);
 
 module.exports = router;

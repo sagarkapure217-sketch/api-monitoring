@@ -6,8 +6,6 @@ const metricsController = require('../controllers/metrics.controller');
 
 const router = Router();
 
-router.use('/monitors', authenticate);
-
-router.get('/monitors/:id/metrics', metricsController.getMetrics);
+router.get('/monitors/:id/metrics', authenticate, metricsController.getMetrics);
 
 module.exports = router;
