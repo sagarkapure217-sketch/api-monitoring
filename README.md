@@ -472,21 +472,8 @@ api_monitoring/
 └── Dockerfile                  # API image configuration
 ```
 
----
 
-## Interview Talking Points
 
-### Why BullMQ & Background Workers?
-* If checks ran in the Express main thread on timer intervals, the API loop would slow down under load. Decoupling checking to a BullMQ worker running in a separate thread/container ensures that the API remains responsive.
-* BullMQ provides robust task guarantees, handles retries, and stores execution states in Redis, preventing jobs from dropping.
-
-### Why Redis Caching?
-* Refreshes to the Dashboard overview page would otherwise hit PostgreSQL for every monitor to fetch the latest checks. Reading from Redis hash cache resolves latest check states instantly, sparing relational database IOPS.
-
-### Why a 3-Check Failure Buffer?
-* Network connections are noisy. Opening an incident on a single request timeout creates "alert fatigue". Requiring 3 consecutive checks to fail ensures alert accuracy and isolates transient glitches.
-
----
 
 ## Future Improvements
 1. **Retry Jitter**: Implement exponential retry backoffs for checking targets to avoid DDOSing servers experiencing temporary traffic spikes.
