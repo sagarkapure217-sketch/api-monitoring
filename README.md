@@ -142,7 +142,7 @@ erDiagram
 
 ## Redis Usage Strategy
 
-Redis serves three critical infrastructure purposes in Alexandria:
+Redis serves three critical infrastructure purposes:
 
 1. **Queue Store (BullMQ)**: Serves as the high-throughput queue broker. The worker polls Redis to get repeatable checker jobs.
 2. **Latest Status Cache (Hash)**: 
