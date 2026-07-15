@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "if [ \"$PROCESS_TYPE\" = \"worker\" ]; then node src/worker.js; else node src/server.js; fi"]
+CMD ["node", "src/server.js"]
